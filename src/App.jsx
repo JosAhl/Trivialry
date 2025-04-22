@@ -11,27 +11,30 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(url);
-        const json = await res.json();
+    const timer = setTimeout(() => {
+      const fetchData = async () => {
+        try {
+          const res = await fetch(url);
+          const json = await res.json();
 
-        const formatted = json.results.map((q) => ({
-          ...q,
-          options: [...q.incorrect_answers, q.correct_answer].sort(
-            () => Math.random() - 0.5
-          ),
-        }));
+          const formatted = json.results.map((q) => ({
+            ...q,
+            options: [...q.incorrect_answers, q.correct_answer].sort(
+              () => Math.random() - 0.5
+            ),
+          }));
 
-        setData(formatted);
-        setLoading(false);
-      } catch (err) {
-        setError("Kunde inte hämta frågor");
-        setLoading(false);
-      }
-    };
+          setData(formatted);
+          setLoading(false);
+        } catch (err) {
+          setError("Kunde inte hämta frågor");
+          setLoading(false);
+        }
+      };
 
-    fetchData();
+      fetchData();
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) return <p>Laddar frågor...</p>;
