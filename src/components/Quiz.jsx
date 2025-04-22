@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Question from "./Questions";
+import Options from "./Options";
 
 const url =
   "https://opentdb.com/api.php?amount=15&category=9&difficulty=medium&type=multiple";
@@ -45,12 +47,18 @@ function Quiz() {
     <div>
       {currentQuestion && (
         <div>
-          <h2 dangerouslySetInnerHTML={{ __html: currentQuestion.question }} />
-          <ul>
-            {currentQuestion.options.map((answer, index) => (
-              <li key={index} dangerouslySetInnerHTML={{ __html: answer }} />
-            ))}
-          </ul>
+          <Question question={currentQuestion.question} />
+          <Options
+            options={currentQuestion.options}
+            handleClick={(option) => {
+              if (option === currentQuestion.correct_answer) {
+                alert("Correct!");
+              } else {
+                alert("Wrong!");
+              }
+              setCurrent((prev) => prev + 1);
+            }}
+          />
           {current < data.length - 1 && (
             <button onClick={() => setCurrent((prev) => prev + 1)}>Next</button>
           )}
