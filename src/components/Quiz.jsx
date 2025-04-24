@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Question from "./Questions";
 import Options from "./Options";
+import Loading from "./Loading";
+import Error from "./Error";
 
 const url =
   "https://opentdb.com/api.php?amount=15&category=9&difficulty=medium&type=multiple";
@@ -10,6 +12,7 @@ function Quiz() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +31,7 @@ function Quiz() {
           setData(formatted);
           setLoading(false);
         } catch (err) {
-          setError("Could not fetch data");
+          setError(err.message);
           setLoading(false);
         }
       };
@@ -38,10 +41,19 @@ function Quiz() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) return <p>Loading questions...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <Loading />;
+  if (error) return <Error message={error} />;
 
   const currentQuestion = data[current];
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+  };
+
+  const handleNextQuestion = () => {
+    setSelectedOption(null);
+    setCurrent((prev) => prev + 1);
+  };
 
   return (
     <div>
@@ -50,17 +62,14 @@ function Quiz() {
           <Question question={currentQuestion.question} />
           <Options
             options={currentQuestion.options}
-            handleClick={(option) => {
-              if (option === currentQuestion.correct_answer) {
-                alert("Correct!");
-              } else {
-                alert("Wrong!");
-              }
-              setCurrent((prev) => prev + 1);
-            }}
+            correctAnswer={currentQuestion.correct_answer}
+            selectedOption={selectedOption}
+            handleClick={handleOptionClick}
           />
           {current < data.length - 1 && (
-            <button onClick={() => setCurrent((prev) => prev + 1)}>Next</button>
+            <button onClick={handleNextQuestion} disabled={!selectedOption}>
+              Next
+            </button>
           )}
         </div>
       )}
