@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
+import Category from "./Category";
 import Question from "./Questions";
 import Options from "./Options";
 import Loading from "./Loading";
 import Error from "./Error";
 
-const url =
-  "https://opentdb.com/api.php?amount=15&category=9&difficulty=medium&type=multiple";
-
 function Quiz() {
+  const [category, setCategory] = useState(null);
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
@@ -18,10 +17,16 @@ function Quiz() {
   const [answerState, setAnswerState] = useState(null);
 
   useEffect(() => {
+    if (!category) return;
+
     const timer = setTimeout(() => {
       const fetchData = async () => {
+        setLoading(true);
+        setError(null);
         try {
-          const res = await fetch(url);
+          const res = await fetch(
+            `https://opentdb.com/api.php?amount=15&category=${category}&difficulty=medium&type=multiple`
+          );
           const json = await res.json();
 
           const formatted = json.results.map((q) => ({
@@ -42,19 +47,12 @@ function Quiz() {
       fetchData();
     }, 1000);
     return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) return <Loading />;
-  if (error) return <Error message={error} />;
-
-  const currentQuestion = data[current];
+  }, [category]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
-
-    /* Update score if the answer is correct */
-    if (option === currentQuestion.correct_answer) {
-      setScore((prevScore) => prevScore + 1);
+    if (option === data[current].correct_answer) {
+      setScore((prev) => prev + 1);
       setAnswerState("correct");
     } else {
       setAnswerState("incorrect");
@@ -64,8 +62,6 @@ function Quiz() {
   const handleNextQuestion = () => {
     setSelectedOption(null);
     setAnswerState(null);
-
-    /* Set to completed after the last question */
     if (current === data.length - 1) {
       setQuizCompleted(true);
     } else {
@@ -74,6 +70,8 @@ function Quiz() {
   };
 
   const resetQuiz = () => {
+    setCategory(null);
+    setData(null);
     setCurrent(0);
     setScore(0);
     setSelectedOption(null);
@@ -81,7 +79,10 @@ function Quiz() {
     setQuizCompleted(false);
   };
 
-  /* Display results when quiz is completed */
+  if (!category) return <Category onSelectCategory={setCategory} />;
+  if (loading) return <Loading />;
+  if (error) return <Error message={error} />;
+
   if (quizCompleted) {
     return (
       <div className="quiz-container">
@@ -101,6 +102,8 @@ function Quiz() {
       </div>
     );
   }
+
+  const currentQuestion = data && data[current];
 
   return (
     <div className="quiz-container">
