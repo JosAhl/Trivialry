@@ -13,6 +13,9 @@ function Quiz() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [score, setScore] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [answerState, setAnswerState] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,30 +51,85 @@ function Quiz() {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+
+    /* Update score if the answer is correct */
+    if (option === currentQuestion.correct_answer) {
+      setScore((prevScore) => prevScore + 1);
+      setAnswerState("correct");
+    } else {
+      setAnswerState("incorrect");
+    }
   };
 
   const handleNextQuestion = () => {
     setSelectedOption(null);
-    setCurrent((prev) => prev + 1);
+    setAnswerState(null);
+
+    /* Set to completed after the last question */
+    if (current === data.length - 1) {
+      setQuizCompleted(true);
+    } else {
+      setCurrent((prev) => prev + 1);
+    }
   };
 
+  const resetQuiz = () => {
+    setCurrent(0);
+    setScore(0);
+    setSelectedOption(null);
+    setAnswerState(null);
+    setQuizCompleted(false);
+  };
+
+  /* Display results when quiz is completed */
+  if (quizCompleted) {
+    return (
+      <div className="quiz-container">
+        <div className="quiz-completed">
+          <h2>Quiz Completed!</h2>
+          <div className="score-display">
+            <p>
+              Final score: <span className="final-score">{score}</span> out of{" "}
+              {data.length}
+            </p>
+            <p>{Math.round((score / data.length) * 100)}% correct</p>
+          </div>
+          <button className="reset-button" onClick={resetQuiz}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="quiz-container">
       {currentQuestion && (
-        <div>
+        <>
+          <div className="quiz-header">
+            <div className="progress">
+              Question {current + 1}/{data.length}
+            </div>
+            <div className="score">
+              Score: {score}/{data.length}
+            </div>
+          </div>
+
           <Question question={currentQuestion.question} />
+
           <Options
             options={currentQuestion.options}
-            correctAnswer={currentQuestion.correct_answer}
             selectedOption={selectedOption}
+            correctAnswer={currentQuestion.correct_answer}
             handleClick={handleOptionClick}
           />
-          {current < data.length - 1 && (
-            <button onClick={handleNextQuestion} disabled={!selectedOption}>
-              Next
+
+          {selectedOption && (
+            <button className="next-button" onClick={handleNextQuestion}>
+              {current < data.length - 1 ? "Next" : "Results"}
             </button>
           )}
-        </div>
+        </>
       )}
     </div>
   );
