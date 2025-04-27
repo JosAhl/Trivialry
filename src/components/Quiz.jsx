@@ -25,7 +25,7 @@ function Quiz() {
         setError(null);
         try {
           const res = await fetch(
-            `https://opentdb.com/api.php?amount=15&category=${category}&difficulty=medium&type=multiple`
+            `https://opentdb.com/api.php?amount=15&category=${category.id}&difficulty=medium&type=multiple`
           );
           const json = await res.json();
 
@@ -110,6 +110,7 @@ function Quiz() {
       {currentQuestion && (
         <>
           <div className="quiz-header">
+            <h2 className="quiz-title">{category.name}</h2>
             <div className="progress">
               Question {current + 1}/{data.length}
             </div>
