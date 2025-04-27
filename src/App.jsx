@@ -4,7 +4,7 @@ import Quiz from "./components/Quiz";
 function App() {
   return (
     <div>
-      <h1>Trivia</h1>
+      <h1>Trivialry</h1>
       <Quiz />
     </div>
   );
