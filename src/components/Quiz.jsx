@@ -21,6 +21,7 @@ function Quiz() {
   const [answerState, setAnswerState] = useState(null);
   const [timeExpired, setTimeExpired] = useState(false);
   const [username, setUsername] = useState("");
+  const [categoryScores, setCategoryScores] = useState([]);
 
   const handleNameSubmit = async (e) => {
     e.preventDefault();
@@ -42,11 +43,20 @@ function Quiz() {
       } else {
         console.log("Score saved successfully:", scoreData);
       }
+      const { data: updatedScores, error: fetchError } = await supabase
+        .from("scores")
+        .select("*")
+        .eq("category", category.name)
+        .order("score", { ascending: false });
+
+      if (fetchError) {
+        console.error("Error fetching updated scores:", fetchError);
+      } else {
+        setCategoryScores(updatedScores);
+      }
     } catch (err) {
       console.error("Error saving score:", err);
     }
-
-    resetQuiz();
   };
 
   useEffect(() => {
@@ -125,6 +135,26 @@ function Quiz() {
     setTimeExpired(false);
   };
 
+  useEffect(() => {
+    if (quizCompleted && category) {
+      const fetchCategoryScores = async () => {
+        const { data, error } = await supabase
+          .from("scores")
+          .select("*")
+          .eq("category", category.name)
+          .order("score", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching scores:", error);
+        } else {
+          setCategoryScores(data);
+        }
+      };
+
+      fetchCategoryScores();
+    }
+  }, [quizCompleted, category]);
+
   if (!category) return <Category onSelectCategory={setCategory} />;
   if (loading) return <Loading />;
   if (error) return <Error message={error} />;
@@ -136,6 +166,18 @@ function Quiz() {
       {quizCompleted ? (
         <div className="quiz-completed">
           <h2>Final Score:</h2>
+          <h3>Top Scores for {category.name}</h3>
+          <ul className="scoreboard">
+            {categoryScores.length === 0 ? (
+              <p>No scores yet for this category!</p>
+            ) : (
+              categoryScores.map((entry) => (
+                <li key={entry.id}>
+                  {entry.username}: {entry.score}%
+                </li>
+              ))
+            )}
+          </ul>
           <div className="score-display">
             <p>
               <span className="final-score">{score}</span> out of{" "}
