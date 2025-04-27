@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import supabase from "../Supabase";
 import Category from "./Category";
 import Question from "./Questions";
 import Options from "./Options";
@@ -19,6 +20,34 @@ function Quiz() {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [answerState, setAnswerState] = useState(null);
   const [timeExpired, setTimeExpired] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const handleNameSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!username) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    const finalScore = Math.round((score / data.length) * 100);
+
+    try {
+      const { data: scoreData, error } = await supabase
+        .from("scores")
+        .insert([{ username, score: finalScore, category: category.name }]);
+
+      if (error) {
+        console.error("Error saving score:", error);
+      } else {
+        console.log("Score saved successfully:", scoreData);
+      }
+    } catch (err) {
+      console.error("Error saving score:", err);
+    }
+
+    resetQuiz();
+  };
 
   useEffect(() => {
     if (!category) return;
@@ -100,48 +129,62 @@ function Quiz() {
   if (loading) return <Loading />;
   if (error) return <Error message={error} />;
 
-  if (quizCompleted) {
-    return (
-      <div className="quiz-container">
+  const currentQuestion = data && current < data.length ? data[current] : null;
+
+  return (
+    <div className="quiz-container">
+      {quizCompleted ? (
         <div className="quiz-completed">
           <h2>Final Score:</h2>
           <div className="score-display">
             <p>
-              <span className="final-score">{score}</span> out of {data.length}
+              <span className="final-score">{score}</span> out of{" "}
+              {data ? data.length : 0}
             </p>
-            <p>{Math.round((score / data.length) * 100)}% correct</p>
+            <p>{data ? Math.round((score / data.length) * 100) : 0}% correct</p>
           </div>
+
+          <form onSubmit={handleNameSubmit}>
+            <div>
+              <label htmlFor="username">Enter Your Name:</label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Your name"
+                required
+              />
+            </div>
+            <button type="submit">Submit Score</button>
+          </form>
+
           <button className="reset-button" onClick={resetQuiz}>
             Try Again
           </button>
         </div>
-      </div>
-    );
-  }
-
-  const currentQuestion = data && data[current];
-
-  return (
-    <div className="quiz-container">
-      {currentQuestion && (
+      ) : (
         <>
           <div className="question-counter">
-            {current + 1}/{data.length}
+            {current + 1}/{data ? data.length : 0}
           </div>
           <div className="quiz-header">
             <h2 className="quiz-title">{category.name}</h2>
             <div className="score">Score: {score}</div>
           </div>
 
-          <Question question={currentQuestion.question} />
-
-          <Options
-            options={currentQuestion.options}
-            selectedOption={selectedOption}
-            correctAnswer={currentQuestion.correct_answer}
-            handleClick={handleOptionClick}
-            disabled={timeExpired}
-          />
+          {currentQuestion && (
+            <>
+              <Question question={currentQuestion.question} />
+              <Options
+                options={currentQuestion.options}
+                selectedOption={selectedOption}
+                correctAnswer={currentQuestion.correct_answer}
+                handleClick={handleOptionClick}
+                disabled={timeExpired}
+              />
+            </>
+          )}
 
           <Timer
             duration={TIME_PER_QUESTION}
@@ -152,7 +195,7 @@ function Quiz() {
           <div className="button-container">
             {(selectedOption || timeExpired) && (
               <button className="next-button" onClick={handleNextQuestion}>
-                {current < data.length - 1 ? "Next" : "Results"}
+                {current < (data ? data.length : 0) - 1 ? "Next" : "Results"}
               </button>
             )}
           </div>
