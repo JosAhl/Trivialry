@@ -125,11 +125,13 @@ function Quiz() {
             handleClick={handleOptionClick}
           />
 
-          {selectedOption && (
-            <button className="next-button" onClick={handleNextQuestion}>
-              {current < data.length - 1 ? "Next" : "Results"}
-            </button>
-          )}
+          <div className="button-container">
+            {selectedOption && (
+              <button className="next-button" onClick={handleNextQuestion}>
+                {current < data.length - 1 ? "Next" : "Results"}
+              </button>
+            )}
+          </div>
         </>
       )}
     </div>
