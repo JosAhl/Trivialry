@@ -1,9 +1,20 @@
 import React from "react";
 
 /* Show the questions as buttons */
-function Options({ options, correctAnswer, selectedOption, handleClick }) {
+function Options({
+  options,
+  correctAnswer,
+  selectedOption,
+  handleClick,
+  disabled,
+}) {
   const getButtonStyle = (option) => {
-    if (!selectedOption) return {};
+    if (!selectedOption) {
+      if (disabled && option === correctAnswer) {
+        return { backgroundColor: "green", color: "white", opacity: 0.7 };
+      }
+      return {};
+    }
     if (option === correctAnswer) {
       return { backgroundColor: "green", color: "white" };
     }
@@ -22,7 +33,7 @@ function Options({ options, correctAnswer, selectedOption, handleClick }) {
           onClick={() => handleClick(option)}
           style={getButtonStyle(option)}
           dangerouslySetInnerHTML={{ __html: option }}
-          disabled={!!selectedOption}
+          disabled={!!selectedOption || disabled}
         />
       ))}
     </div>
