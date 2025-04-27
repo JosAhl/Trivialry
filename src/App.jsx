@@ -1,4 +1,5 @@
 import "./App.css";
+import "./css/Timer.css";
 import Quiz from "./components/Quiz";
 
 function App() {
