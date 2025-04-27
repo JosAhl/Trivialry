@@ -87,11 +87,10 @@ function Quiz() {
     return (
       <div className="quiz-container">
         <div className="quiz-completed">
-          <h2>Quiz Completed!</h2>
+          <h2>Final Score:</h2>
           <div className="score-display">
             <p>
-              Final score: <span className="final-score">{score}</span> out of{" "}
-              {data.length}
+              <span className="final-score">{score}</span> out of {data.length}
             </p>
             <p>{Math.round((score / data.length) * 100)}% correct</p>
           </div>
@@ -109,14 +108,12 @@ function Quiz() {
     <div className="quiz-container">
       {currentQuestion && (
         <>
+          <div className="question-counter">
+            {current + 1}/{data.length}
+          </div>
           <div className="quiz-header">
             <h2 className="quiz-title">{category.name}</h2>
-            <div className="progress">
-              Question {current + 1}/{data.length}
-            </div>
-            <div className="score">
-              Score: {score}/{data.length}
-            </div>
+            <div className="score">Score: {score}</div>
           </div>
 
           <Question question={currentQuestion.question} />
