@@ -4,6 +4,9 @@ import Question from "./Questions";
 import Options from "./Options";
 import Loading from "./Loading";
 import Error from "./Error";
+import Timer from "./Timer";
+
+const TIME_PER_QUESTION = 20;
 
 function Quiz() {
   const [category, setCategory] = useState(null);
@@ -15,6 +18,7 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [answerState, setAnswerState] = useState(null);
+  const [timeExpired, setTimeExpired] = useState(false);
 
   useEffect(() => {
     if (!category) return;
@@ -49,7 +53,19 @@ function Quiz() {
     return () => clearTimeout(timer);
   }, [category]);
 
+  useEffect(() => {
+    setTimeExpired(false);
+  }, [current]);
+
+  const handleTimeUp = () => {
+    if (!selectedOption) {
+      setTimeExpired(true);
+    }
+  };
+
   const handleOptionClick = (option) => {
+    if (timeExpired) return;
+
     setSelectedOption(option);
     if (option === data[current].correct_answer) {
       setScore((prev) => prev + 1);
@@ -77,6 +93,7 @@ function Quiz() {
     setSelectedOption(null);
     setAnswerState(null);
     setQuizCompleted(false);
+    setTimeExpired(false);
   };
 
   if (!category) return <Category onSelectCategory={setCategory} />;
@@ -123,10 +140,17 @@ function Quiz() {
             selectedOption={selectedOption}
             correctAnswer={currentQuestion.correct_answer}
             handleClick={handleOptionClick}
+            disabled={timeExpired}
+          />
+
+          <Timer
+            duration={TIME_PER_QUESTION}
+            onTimeUp={handleTimeUp}
+            key={current}
           />
 
           <div className="button-container">
-            {selectedOption && (
+            {(selectedOption || timeExpired) && (
               <button className="next-button" onClick={handleNextQuestion}>
                 {current < data.length - 1 ? "Next" : "Results"}
               </button>
