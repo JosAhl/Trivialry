@@ -179,7 +179,6 @@ function Quiz() {
     <div className="quiz-container">
       {quizCompleted ? (
         <div className="quiz-completed">
-          <h2>Final Score:</h2>
           <h3>Top Scores for {category.name}</h3>
           <ul className="scoreboard">
             {categoryScores.length === 0 ? (
@@ -192,6 +191,7 @@ function Quiz() {
               ))
             )}
           </ul>
+          <h2>Final Score:</h2>
           <div className="score-display">
             <p>
               <span className="final-score">{score}</span> out of{" "}
