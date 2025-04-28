@@ -10,12 +10,18 @@ const categories = [
 ];
 
 export default function CategorySelection({ onSelectCategory }) {
+  const handleCategorySelect = (category) => {
+    /* Save category in sessionStorage */
+    sessionStorage.setItem("selectedCategory", JSON.stringify(category));
+    onSelectCategory(category);
+  };
+
   return (
     <div>
       <div className="category-selection">
         <h2>Select a category</h2>
         {categories.map((cat) => (
-          <button key={cat.id} onClick={() => onSelectCategory(cat)}>
+          <button key={cat.id} onClick={() => handleCategorySelect(cat)}>
             {cat.name}
           </button>
         ))}
