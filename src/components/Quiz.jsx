@@ -32,6 +32,11 @@ function Quiz() {
           const res = await fetch(
             `https://opentdb.com/api.php?amount=15&category=${category.id}&difficulty=medium&type=multiple`
           );
+
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+
           const json = await res.json();
 
           const formatted = json.results.map((q) => ({
@@ -120,6 +125,10 @@ function Quiz() {
         </div>
       </div>
     );
+  }
+
+  if (!data || data.length == 0) {
+    return null;
   }
 
   const currentQuestion = data && data[current];

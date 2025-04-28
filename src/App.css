@@ -10,6 +10,15 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  width: 150px;
+  display: block;
+  margin: 0 auto;
 }
 
 .quiz-container {
@@ -29,8 +38,8 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  max-width: 600px;
-  margin: 2rem auto;
+  max-width: 100%;
+  margin: auto;
   background-color: #0a0a0a;
   padding: 1rem 2rem;
   border-radius: 1rem;
@@ -48,7 +57,6 @@ body {
   font-size: 1rem;
   border: solid 1px #ccc;
   border-radius: 8px;
-  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -69,6 +77,16 @@ body {
 .options .option:hover {
   background-color: #333;
   transform: scale(1.03);
+}
+
+.option.disabled {
+  pointer-events: none;
+  opacity: 1;
+}
+
+.option.disabled:hover {
+  background-color: inherit;
+  transform: none;
 }
 
 /* "Next" and "Try Again" button container */
