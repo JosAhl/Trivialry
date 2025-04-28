@@ -47,7 +47,8 @@ function Quiz() {
         .from("scores")
         .select("*")
         .eq("category", category.name)
-        .order("score", { ascending: false });
+        .order("score", { ascending: false })
+        .limit(5);
 
       if (fetchError) {
         console.error("Error fetching updated scores:", fetchError);
@@ -142,7 +143,8 @@ function Quiz() {
           .from("scores")
           .select("*")
           .eq("category", category.name)
-          .order("score", { ascending: false });
+          .order("score", { ascending: false })
+          .limit(5);
 
         if (error) {
           console.error("Error fetching scores:", error);
