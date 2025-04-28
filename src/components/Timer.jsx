@@ -40,7 +40,7 @@ function Timer({ duration, onTimeUp, hasGuessed }) {
 
   return (
     <div className="timer-container">
-      <div className="timer-display">
+      <div className="timer-display" aria-live="polite">
         <span>{timeLeft > 0 ? `${timeLeft}s` : "Time's up!"}</span>
       </div>
       <div className="timer-bar-container">

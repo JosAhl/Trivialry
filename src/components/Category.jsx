@@ -17,15 +17,13 @@ export default function CategorySelection({ onSelectCategory }) {
   };
 
   return (
-    <div>
-      <div className="category-selection">
-        <h2>Select a category</h2>
-        {categories.map((cat) => (
-          <button key={cat.id} onClick={() => handleCategorySelect(cat)}>
-            {cat.name}
-          </button>
-        ))}
-      </div>
-    </div>
+    <fieldset className="category-selection">
+      <h2>Select a category</h2>
+      {categories.map((cat) => (
+        <button key={cat.id} onClick={() => handleCategorySelect(cat)}>
+          {cat.name}
+        </button>
+      ))}
+    </fieldset>
   );
 }
