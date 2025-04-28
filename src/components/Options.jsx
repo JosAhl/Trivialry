@@ -35,6 +35,7 @@ function Options({
           style={getButtonStyle(option)}
           dangerouslySetInnerHTML={{ __html: option }}
           disabled={!!selectedOption || disabled}
+          aria-pressed={selectedOption === option}
         />
       ))}
     </div>

@@ -182,7 +182,7 @@ function Quiz() {
           <h3>Top Scores for {category.name}</h3>
           <ul className="scoreboard">
             {categoryScores.length === 0 ? (
-              <p>No scores yet for this category!</p>
+              <li>No scores yet for this category!</li>
             ) : (
               categoryScores.map((entry) => (
                 <li key={entry.id}>
