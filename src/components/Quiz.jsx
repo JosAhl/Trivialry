@@ -171,6 +171,10 @@ function Quiz() {
 
   const currentQuestion = data && current < data.length ? data[current] : null;
 
+  if (!data || data.length == 0) {
+    return null;
+  }
+
   return (
     <div className="quiz-container">
       {quizCompleted ? (
@@ -216,32 +220,19 @@ function Quiz() {
           </button>
         </div>
       ) : (
-
-      </div>
-    );
-  }
-
-  if (!data || data.length == 0) {
-    return null;
-  }
-
-  const currentQuestion = data && data[current];
-
-  return (
-    <div className="quiz-container">
-      {currentQuestion && (
         <>
-          <div className="question-counter">
-            {current + 1}/{data ? data.length : 0}
-          </div>
-          <div className="quiz-header">
-            <h2 className="quiz-title">{category.name}</h2>
-            <div className="score">Score: {score}</div>
-          </div>
-
-          {currentQuestion && (
+          {data && currentQuestion && (
             <>
+              <div className="question-counter">
+                {current + 1}/{data.length}
+              </div>
+              <div className="quiz-header">
+                <h2 className="quiz-title">{category.name}</h2>
+                <div className="score">Score: {score}</div>
+              </div>
+
               <Question question={currentQuestion.question} />
+
               <Options
                 options={currentQuestion.options}
                 selectedOption={selectedOption}
@@ -249,23 +240,25 @@ function Quiz() {
                 handleClick={handleOptionClick}
                 disabled={timeExpired}
               />
+
+              <Timer
+                duration={TIME_PER_QUESTION}
+                onTimeUp={handleTimeUp}
+                key={current}
+                hasGuessed={userHasGuessed}
+              />
+
+              <div className="button-container">
+                {(selectedOption || timeExpired) && (
+                  <button className="next-button" onClick={handleNextQuestion}>
+                    {current < (data ? data.length : 0) - 1
+                      ? "Next"
+                      : "Results"}
+                  </button>
+                )}
+              </div>
             </>
           )}
-
-          <Timer
-            duration={TIME_PER_QUESTION}
-            onTimeUp={handleTimeUp}
-            key={current}
-            hasGuessed={userHasGuessed}
-          />
-
-          <div className="button-container">
-            {(selectedOption || timeExpired) && (
-              <button className="next-button" onClick={handleNextQuestion}>
-                {current < (data ? data.length : 0) - 1 ? "Next" : "Results"}
-              </button>
-            )}
-          </div>
         </>
       )}
     </div>
