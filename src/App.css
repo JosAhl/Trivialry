@@ -6,6 +6,19 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
+  background-image: url("./assets/quiz-background-retro.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  width: 150px;
+  display: block;
+  margin: 0 auto;
 }
 
 .quiz-container {
@@ -13,6 +26,10 @@ body {
   flex-direction: column;
   min-height: 400px;
   position: relative;
+  background-color: #0a0a0a;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  opacity: 0.85;
 }
 
 /* Button container */
@@ -21,23 +38,25 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  max-width: 600px;
-  margin: 2rem auto;
+  max-width: 100%;
+  margin: auto;
+  background-color: #0a0a0a;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  opacity: 0.85;
 }
 
 /* Button styles */
 .category-selection button,
 .options .option {
-  width: 250px;
-  min-width: 250px;
-  min-height: 80px;
+  width: 100%;
+  max-width: 250px;
   height: 80px;
   overflow-y: auto;
   padding: 1rem;
   font-size: 1rem;
   border: solid 1px #ccc;
   border-radius: 8px;
-  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -46,11 +65,28 @@ body {
   transition: background-color 0.3s, transform 0.2s;
 }
 
+@media (min-width: 600px) {
+  .category-selection button,
+  .options .option {
+    min-width: 150px;
+  }
+}
+
 /* Hover effect */
 .category-selection button:hover,
 .options .option:hover {
   background-color: #333;
   transform: scale(1.03);
+}
+
+.option.disabled {
+  pointer-events: none;
+  opacity: 1;
+}
+
+.option.disabled:hover {
+  background-color: inherit;
+  transform: none;
 }
 
 /* "Next" and "Try Again" button container */
@@ -69,7 +105,7 @@ body {
   color: white;
   border: none;
   cursor: pointer;
-  margin-top: 1.5rem;
+  margin: 1.5rem 0;
   transition: background-color 0.3s;
   position: absolute;
   bottom: 0;

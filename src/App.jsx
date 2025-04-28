@@ -1,11 +1,12 @@
 import "./App.css";
+import trivialryLogo from "./assets/trivialry_white.png";
 import "./css/Timer.css";
 import Quiz from "./components/Quiz";
 
 function App() {
   return (
     <div>
-      <h1>Trivialry</h1>
+      <img src={trivialryLogo} alt="Trivialry Logo" className="logo" />
       <Quiz />
     </div>
   );

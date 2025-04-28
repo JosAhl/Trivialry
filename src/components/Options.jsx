@@ -11,17 +11,18 @@ function Options({
   const getButtonStyle = (option) => {
     if (!selectedOption) {
       if (disabled && option === correctAnswer) {
-        return { backgroundColor: "green", color: "white", opacity: 0.7 };
+        return { backgroundColor: "green", color: "white", opacity: 1 };
       }
       return {};
     }
+
     if (option === correctAnswer) {
-      return { backgroundColor: "green", color: "white" };
+      return { backgroundColor: "green", color: "white", opacity: 1 };
     }
     if (option === selectedOption) {
-      return { backgroundColor: "red", color: "white" };
+      return { backgroundColor: "red", color: "white", opacity: 1 };
     }
-    return { backgroundColor: "lightgray" };
+    return { backgroundColor: "lightgray", opacity: 0.7 };
   };
 
   return (
@@ -29,7 +30,7 @@ function Options({
       {options.map((option, index) => (
         <button
           key={index}
-          className="option"
+          className={`option ${selectedOption || disabled ? "disabled" : ""}`}
           onClick={() => handleClick(option)}
           style={getButtonStyle(option)}
           dangerouslySetInnerHTML={{ __html: option }}

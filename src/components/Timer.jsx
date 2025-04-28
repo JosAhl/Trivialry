@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
-function Timer({ duration, onTimeUp }) {
+function Timer({ duration, onTimeUp, hasGuessed }) {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     let interval = null;
 
-    if (isActive && timeLeft > 0) {
+    if (isActive && timeLeft > 0 && !hasGuessed) {
       interval = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
@@ -17,7 +17,7 @@ function Timer({ duration, onTimeUp }) {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, onTimeUp]);
+  }, [isActive, timeLeft, onTimeUp, hasGuessed]);
 
   /* Reset timer for next question */
   useEffect(() => {
@@ -25,6 +25,9 @@ function Timer({ duration, onTimeUp }) {
     setIsActive(true);
   }, [duration]);
 
+  if (hasGuessed) {
+    return null;
+  }
   /* Calculate percentage */
   const progressPercentage = (timeLeft / duration) * 100;
 

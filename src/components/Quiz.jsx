@@ -16,6 +16,7 @@ function Quiz() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [userHasGuessed, setUserHasGuessed] = useState(false);
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [answerState, setAnswerState] = useState(null);
@@ -71,6 +72,11 @@ function Quiz() {
           const res = await fetch(
             `https://opentdb.com/api.php?amount=15&category=${category.id}&difficulty=medium&type=multiple`
           );
+
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+
           const json = await res.json();
 
           const formatted = json.results.map((q) => ({
@@ -107,6 +113,7 @@ function Quiz() {
     if (timeExpired) return;
 
     setSelectedOption(option);
+    setUserHasGuessed(true);
     if (option === data[current].correct_answer) {
       setScore((prev) => prev + 1);
       setAnswerState("correct");
@@ -118,6 +125,7 @@ function Quiz() {
   const handleNextQuestion = () => {
     setSelectedOption(null);
     setAnswerState(null);
+    setUserHasGuessed(false);
     if (current === data.length - 1) {
       setQuizCompleted(true);
     } else {
@@ -208,6 +216,20 @@ function Quiz() {
           </button>
         </div>
       ) : (
+
+      </div>
+    );
+  }
+
+  if (!data || data.length == 0) {
+    return null;
+  }
+
+  const currentQuestion = data && data[current];
+
+  return (
+    <div className="quiz-container">
+      {currentQuestion && (
         <>
           <div className="question-counter">
             {current + 1}/{data ? data.length : 0}
@@ -234,6 +256,7 @@ function Quiz() {
             duration={TIME_PER_QUESTION}
             onTimeUp={handleTimeUp}
             key={current}
+            hasGuessed={userHasGuessed}
           />
 
           <div className="button-container">
