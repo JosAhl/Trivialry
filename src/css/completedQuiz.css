@@ -1,0 +1,48 @@
+.quiz-completed h2,
+.quiz-completed h3 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-family: "Orbitron", sans-serif; /* Ett exempel på futuristiskt font */
+  text-shadow: 0 0 5px #00f0ff;
+}
+
+.scoreboard {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.scoreboard li {
+  color: #00f0ff;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  text-shadow: 0 0 3px #00f0ff;
+}
+
+.score-display p {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  text-shadow: 0 0 3px #ff00ff;
+}
+
+.final-score {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff00ff;
+  text-shadow: 0 0 5px #ff00ff;
+}
+
+.submitForm {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.submitForm label,
+.submitForm input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

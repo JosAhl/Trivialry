@@ -1,6 +1,7 @@
 import "./App.css";
 import trivialryLogo from "./assets/trivialry_white.png";
 import "./css/Timer.css";
+import "./css/completedQuiz.css";
 import Quiz from "./components/Quiz";
 
 function App() {

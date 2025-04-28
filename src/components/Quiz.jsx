@@ -200,7 +200,7 @@ function Quiz() {
             <p>{data ? Math.round((score / data.length) * 100) : 0}% correct</p>
           </div>
 
-          <form onSubmit={handleNameSubmit}>
+          <form onSubmit={handleNameSubmit} className="submitForm">
             <div>
               <label htmlFor="username">Enter Your Name:</label>
               <input
