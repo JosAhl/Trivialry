@@ -49,7 +49,7 @@ body {
 /* Button styles */
 .category-selection button,
 .options .option {
-  width: 100%;
+  width: 250px;
   height: 50px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -68,7 +68,6 @@ body {
   .options {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    padding: 1rem 2rem;
   }
 
   .category-selection button,
