@@ -27,8 +27,6 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 400px;
-  width: 600px;
-  height: 500px;
   position: relative;
   background-color: #0a0a0a;
   padding: 1rem 2rem;
@@ -42,8 +40,6 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.5rem;
-  max-width: 100%;
-  margin: auto;
   background-color: #0a0a0a;
   padding: 1rem;
   border-radius: 1rem;
@@ -53,8 +49,8 @@ body {
 /* Button styles */
 .category-selection button,
 .options .option {
-  width: 250px;
   height: 50px;
+  width: 150px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   border: solid 1px #ccc;
@@ -79,14 +75,7 @@ body {
     height: 80px;
     font-size: 1rem;
     padding: 1rem;
-    max-width: 250px;
-  }
-}
-
-@media (min-width: 600px) {
-  .category-selection button,
-  .options .option {
-    min-width: 150px;
+    min-width: 250px;
   }
 }
 
@@ -123,13 +112,13 @@ body {
   color: white;
   border: none;
   cursor: pointer;
-  margin: 1.5rem 0;
+  /* margin: 1.5rem 0; */
   transition: background-color 0.3s;
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   min-width: 140px;
   left: 50%;
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
 }
 
 /* Hover effect */
