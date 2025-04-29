@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import leoProfanity from "leo-profanity";
 import supabase from "../Supabase";
 import Category from "./Category";
 import Question from "./Questions";
@@ -29,6 +30,11 @@ function Quiz() {
 
     if (!username) {
       alert("Please enter your name.");
+      return;
+    }
+
+    if (leoProfanity.check(username)) {
+      alert("Please use a different name.");
       return;
     }
 
